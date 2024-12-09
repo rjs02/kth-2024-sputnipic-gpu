@@ -234,7 +234,7 @@ int mover_PC(struct particles* part, struct EMfield* field, struct grid* grd, st
 
 
 // handles a single particle
-__global__ move_kernel(struct particles *part, struct EMfield *field, truct grid* grd, struct parameters* param, 
+__global__ void move_kernel(struct particles *part, struct EMfield *field, struct grid* grd, struct parameters* param, 
                        FPpart dt_sub_cycling, FPpart dto2, FPpart qomdt2, int n_sub_cycles) {
 
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -247,13 +247,13 @@ __global__ move_kernel(struct particles *part, struct EMfield *field, truct grid
     float omdtsq, denom, ut, vt, wt, udotb;
 
     float xi[2], eta[2], zeta[2];
-    weight[2][2][2];
+    float weight[2][2][2];
 
     // local (to the particle) electric and magnetic field
     FPfield Exl=0.0, Eyl=0.0, Ezl=0.0, Bxl=0.0, Byl=0.0, Bzl=0.0;
 
     // subcycle loop
-    for(int i_sub = 0; i < n_sub_cycles; ++i_sub) {
+    for(int i_sub = 0; i_sub < n_sub_cycles; ++i_sub) {
 
         pos_tilde = pos;
         B = E = make_float3(0.0, 0.0, 0.0);
@@ -379,7 +379,6 @@ __global__ move_kernel(struct particles *part, struct EMfield *field, truct grid
     part->v[idx] = vel.y;
     part->w[idx] = vel.z;
 
-    return 0;
 }
 
 
