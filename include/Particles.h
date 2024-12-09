@@ -61,6 +61,12 @@ void particle_deallocate(struct particles*);
 /** particle mover */
 int mover_PC(struct particles*, struct EMfield*, struct grid*, struct parameters*);
 
+// kernel
+__global__ void move_kernel(particles* part, EMfield* field, grid* grd, parameters* param, float dto2, float qomdt2, int n_sub_cycles);
+
+/** particle mover on GPU */
+int mover_PC_gpu(struct particles*, struct EMfield*, struct grid*, struct parameters*);
+
 /** Interpolation Particle --> Grid: This is for species */
 void interpP2G(struct particles*, struct interpDensSpecies*, struct grid*);
 
